@@ -1,6 +1,6 @@
 {
   "name": "@o4s/keeper",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Keeper is a function wrapper, which caches the response on redis",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
