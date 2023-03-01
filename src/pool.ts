@@ -6,12 +6,15 @@ export class IORedisConnectionOptions {
   meh: Options = {}
 }
 
+export type CustomRedisConstructor = new (url: string, options: RedisOptions) => IRedis
+
 export class IORedisPoolOptions {
   url?: string
   host: string | undefined = '127.0.0.1'
   port: number | undefined = 6379
   redisOptions: RedisOptions = {}
   poolOptions: Options = {}
+  customRedisConstructor?: CustomRedisConstructor
 
   public static fromUrl(url: string): IORedisPoolOptions {
     const instance = new IORedisPoolOptions()
@@ -38,8 +41,9 @@ export class IORedisPoolOptions {
     return this
   }
 
-  withPoolOptions(poolOptions: Options): IORedisPoolOptions {
+  withPoolOptions(poolOptions: Options, customRedisConstructor?: CustomRedisConstructor): IORedisPoolOptions {
     this.poolOptions = poolOptions
+    this.customRedisConstructor = customRedisConstructor
     return this
   }
 }
@@ -58,7 +62,9 @@ export class IORedisPool extends EventEmitter {
         const context = this
         return new Promise((resolve, reject) => {
           let client: IRedis
-          if (context.opts.url) {
+          if (context.opts.customRedisConstructor && context.opts.url) {
+            client = new context.opts.customRedisConstructor(context.opts.url, context.opts.redisOptions)
+          } else if (context.opts.url) {
             client = new Redis(context.opts.url, context.opts.redisOptions)
           } else {
             client = new Redis(context.opts.port || 6379, context.opts.host || '127.0.0.1', context.opts.redisOptions)

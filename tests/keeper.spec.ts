@@ -8,9 +8,8 @@ const l1 = function listener() {
   counter++
 }
 eventEmitter.addListener("ping", l1)
-const redis = new RedisMock.default()
 
-const getCache = (a: string) => redis
+const cacheUri = "redis://localhost:6379/12"
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -41,9 +40,9 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
+        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
       },
-      getCache,
+      cacheUri,
       keygen,
       fn
     )
@@ -54,9 +53,9 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
+        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
       },
-      getCache,
+      cacheUri,
       keygen,
       fn
     )
@@ -67,9 +66,9 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
+        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
       },
-      getCache,
+      cacheUri,
       keygen,
       fn
     )
@@ -82,9 +81,9 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
+        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
       },
-      getCache,
+      cacheUri,
       keygen,
       fn
     )
@@ -95,9 +94,9 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 0 }
+        options: { parseJSON: true, expire: 0, customRedisConstructor: RedisMock.default }
       },
-      getCache,
+      cacheUri,
       keygen,
       fn
     )
