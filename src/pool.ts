@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import { createPool, Factory, Pool, Options } from 'generic-pool'
-import Redis, { Redis as IRedis, RedisOptions } from 'ioredis'
+import Redis, { Redis as IRedis, RedisOptions, Pipeline, RedisCommander } from 'ioredis'
 
 export class IORedisConnectionOptions {
   meh: Options = {}
@@ -188,15 +188,18 @@ export class IORedisPool extends EventEmitter {
     return res
   }
 
-  async multi() {
+  /**
+   * commands can be [["set", "testMulti", "5"], ["get", "testMulti"], ["incr", "testMulti"], ["decr", "testMulti"]]
+   * TODO: instead of using plain array of string, expose a function just like redis.multi 
+   * so that a chainable object is returned and type definable
+   * 
+   * @param commands string[][]
+   * @returns 
+   */
+  async execCommands(commands: string[][]) {
     const cache = await this.getConnection()
-    const res = await cache.multi()
-    const _exec = res.exec
-    res.exec = async (): Promise<[error: Error | null, result: unknown][] | null> => {
-      const res = await _exec()
-      this.pool.release(cache)
-      return res
-    }
+    const res = await cache.pipeline(commands).exec()
+    this.pool.release(cache)
     return res
   }
 

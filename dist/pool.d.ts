@@ -41,7 +41,15 @@ export declare class IORedisPool extends EventEmitter {
     get(key: string): Promise<string | null>;
     mget(keys: string[]): Promise<(string | null)[]>;
     exists(keys: string[]): Promise<number>;
-    multi(): Promise<import("ioredis").ChainableCommander>;
+    /**
+     * commands can be [["set", "testMulti", "5"], ["get", "testMulti"], ["incr", "testMulti"], ["decr", "testMulti"]]
+     * TODO: instead of using plain array of string, expose a function just like redis.multi
+     * so that a chainable object is returned and type definable
+     *
+     * @param commands string[][]
+     * @returns
+     */
+    execCommands(commands: string[][]): Promise<[error: Error | null, result: unknown][] | null>;
     release(client: IRedis): Promise<void>;
     disconnect(client: IRedis): Promise<void>;
     end(): Promise<void>;
