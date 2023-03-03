@@ -6,6 +6,10 @@ import Redis, { Redis as IRedis, RedisOptions } from 'ioredis';
 export declare class IORedisConnectionOptions {
     meh: Options;
 }
+/**
+ * This is a an extension of keeper library.
+ * This wraps ioredis giving pooling capability
+ */
 export declare class IORedisPoolOptions {
     url?: string;
     host: string | undefined;
@@ -49,7 +53,7 @@ export declare class IORedisPool extends EventEmitter {
      * @param commands string[][]
      * @returns
      */
-    execCommands(commands: string[][]): Promise<[error: Error | null, result: unknown][] | null>;
+    execCommands(commands: (number | string)[][]): Promise<[error: Error | null, result: unknown][] | null>;
     release(client: IRedis): Promise<void>;
     disconnect(client: IRedis): Promise<void>;
     end(): Promise<void>;

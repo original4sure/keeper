@@ -6,7 +6,10 @@ export class IORedisConnectionOptions {
   meh: Options = {}
 }
 
-
+/**
+ * This is a an extension of keeper library. 
+ * This wraps ioredis giving pooling capability
+ */
 export class IORedisPoolOptions {
   url?: string
   host: string | undefined = '127.0.0.1'
@@ -196,7 +199,7 @@ export class IORedisPool extends EventEmitter {
    * @param commands string[][]
    * @returns 
    */
-  async execCommands(commands: string[][]) {
+  async execCommands(commands: (number | string)[][]) {
     const cache = await this.getConnection()
     const res = await cache.pipeline(commands).exec()
     this.pool.release(cache)

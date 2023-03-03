@@ -24,6 +24,8 @@ const createPool = (url: string) => {
     .withPoolOptions({
       min: Number(process.env.KEEPER_POOL_MIN) || 2,
       max: Number(process.env.KEEPER_POOL_MAX) || 10,
+      acquireTimeoutMillis: Number(process.env.KEEPER_ACQUIRE_TIMEOUT) || 1000,
+      maxWaitingClients: Number(process.env.KEEPER_MAX_WAITING) || 300
     })
   return new IORedisPool(ioRedisPoolOpts)
 }

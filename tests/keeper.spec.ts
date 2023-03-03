@@ -112,7 +112,7 @@ describe("testing data save on redis", () => {
     const result = await ans(3)
     chai.assert.equal(result, "fn-result-3", "value retained after 1.5s")
   })
-  it.only("multi chain should work fine", async () => {
+  it("multi chain should work fine", async () => {
     const ioRedisPoolOpts = Pool.IORedisPoolOptions.fromUrl(cacheUri)
       // This accepts the RedisOptions class from ioredis as an argument
       // https://github.com/luin/ioredis/blob/master/lib/redis/RedisOptions.ts
