@@ -120,8 +120,81 @@ export class IORedisPool extends EventEmitter {
     return createPool(factory, this.opts.poolOptions)
   }
 
+  getInfo() {
+    return {
+      spareResourceCapacity: this.pool.spareResourceCapacity,
+      size: this.pool.size,
+      available: this.pool.available,
+      borrowed: this.pool.borrowed,
+      pending: this.pool.pending,
+      max: this.pool.max,
+      min: this.pool.min
+    }
+  }
+
   getConnection(priority?: number) {
     return this.pool.acquire(priority)
+  }
+
+  async del(keys: string[]) {
+    const cache = await this.getConnection()
+    const res = await cache.del(keys)
+    this.pool.release(cache)
+    return res
+  }
+
+  async set(key: string, value: string | number | Buffer) {
+    const cache = await this.getConnection()
+    const res = await cache.set(key, value)
+    this.pool.release(cache)
+    return res
+  }
+
+  async setWithSeconds(key: string, value: string | number | Buffer, secondsToken: "EX", seconds: number | string) {
+    const cache = await this.getConnection()
+    const res = await cache.set(key, value, secondsToken, seconds)
+    this.pool.release(cache)
+    return res
+  }
+
+  async setex(key: string, ttl: number, value: number | string | Buffer) {
+    const cache = await this.getConnection()
+    const res = await cache.setex(key, ttl, value)
+    this.pool.release(cache)
+    return res
+  }
+
+  async get(key: string) {
+    const cache = await this.getConnection()
+    const res = await cache.get(key)
+    this.pool.release(cache)
+    return res
+  }
+
+  async mget(keys: string[]) {
+    const cache = await this.getConnection()
+    const res = await cache.mget(keys)
+    this.pool.release(cache)
+    return res
+  }
+
+  async exists(keys: string[]) {
+    const cache = await this.getConnection()
+    const res = await cache.exists(keys)
+    this.pool.release(cache)
+    return res
+  }
+
+  async multi() {
+    const cache = await this.getConnection()
+    const res = await cache.multi()
+    const _exec = res.exec
+    res.exec = async (): Promise<[error: Error | null, result: unknown][] | null> => {
+      const res = await _exec()
+      this.pool.release(cache)
+      return res
+    }
+    return res
   }
 
   release(client: IRedis) {
