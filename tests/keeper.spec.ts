@@ -1,4 +1,6 @@
 import * as chai from "chai"
+import * as sinon from "sinon"
+import * as Pool from "../src/pool"
 import { Keeper } from "../src/index"
 import * as RedisMock from "ioredis-mock"
 import * as events from "events"
@@ -8,6 +10,11 @@ const l1 = function listener() {
   counter++
 }
 eventEmitter.addListener("ping", l1)
+
+const createRedisStub = sinon.stub(Pool, 'createRedis').callsFake(
+  function () {
+    return new RedisMock.default()
+  })
 
 const cacheUri = "redis://localhost:6379/12"
 
@@ -40,7 +47,7 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
+        options: { parseJSON: true, expire: 1 }
       },
       cacheUri,
       keygen,
@@ -53,7 +60,7 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
+        options: { parseJSON: true, expire: 1 }
       },
       cacheUri,
       keygen,
@@ -66,7 +73,7 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
+        options: { parseJSON: true, expire: 1 }
       },
       cacheUri,
       keygen,
@@ -81,7 +88,7 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 1, customRedisConstructor: RedisMock.default }
+        options: { parseJSON: true, expire: 1 }
       },
       cacheUri,
       keygen,
@@ -94,7 +101,7 @@ describe("testing data save on redis", () => {
     const ans = Keeper(
       {
         uri: "test-redis",
-        options: { parseJSON: true, expire: 0, customRedisConstructor: RedisMock.default }
+        options: { parseJSON: true, expire: 0 }
       },
       cacheUri,
       keygen,
@@ -104,5 +111,8 @@ describe("testing data save on redis", () => {
     await delay(1500)
     const result = await ans(3)
     chai.assert.equal(result, "fn-result-3", "value retained after 1.5s")
+  })
+  after(() => {
+    createRedisStub.restore()
   })
 })
