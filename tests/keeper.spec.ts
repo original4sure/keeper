@@ -45,10 +45,7 @@ const fn = async (a: number) => {
 describe("testing data save on redis", () => {
   it("should save/retrieve data from redis", async () => {
     const ans = Keeper(
-      {
-        uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
-      },
+      { parseJSON: true, expire: 1 },
       cacheUri,
       keygen,
       fn
@@ -58,10 +55,7 @@ describe("testing data save on redis", () => {
   })
   it("should be able to retrieve data without cacheMiss", async () => {
     const ans = Keeper(
-      {
-        uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
-      },
+      { parseJSON: true, expire: 1 },
       cacheUri,
       keygen,
       fn
@@ -71,10 +65,7 @@ describe("testing data save on redis", () => {
   })
   it("should be able to save data with new key with cacheMiss", async () => {
     const ans = Keeper(
-      {
-        uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
-      },
+      { parseJSON: true, expire: 1 },
       cacheUri,
       keygen,
       fn
@@ -86,10 +77,7 @@ describe("testing data save on redis", () => {
   it("should call cacheMiss again", async () => {
     await delay(1000)
     const ans = Keeper(
-      {
-        uri: "test-redis",
-        options: { parseJSON: true, expire: 1 }
-      },
+      { parseJSON: true, expire: 1 },
       cacheUri,
       keygen,
       fn
@@ -99,10 +87,7 @@ describe("testing data save on redis", () => {
   })
   it("should save cache indefinitely if time set as 0", async () => {
     const ans = Keeper(
-      {
-        uri: "test-redis",
-        options: { parseJSON: true, expire: 0 }
-      },
+      { parseJSON: true, expire: 0 },
       cacheUri,
       keygen,
       fn
