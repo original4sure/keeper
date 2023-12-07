@@ -1,8 +1,7 @@
 /// <reference types="node" />
-/// <reference types="node" />
 import { EventEmitter } from 'events';
 import { Options } from 'generic-pool';
-import Redis, { Redis as IRedis, RedisOptions } from 'ioredis';
+import { Redis as IRedis, RedisOptions } from 'ioredis';
 export declare class IORedisConnectionOptions {
     meh: Options;
 }
@@ -22,7 +21,7 @@ export declare class IORedisPoolOptions {
     withIORedisOptions(options: RedisOptions): IORedisPoolOptions;
     withPoolOptions(poolOptions: Options): IORedisPoolOptions;
 }
-export declare const createRedis: (opts: IORedisPoolOptions) => Redis;
+export declare const createRedis: (opts: IORedisPoolOptions) => any;
 export declare class IORedisPool extends EventEmitter {
     private opts;
     private pool;
@@ -43,14 +42,14 @@ export declare class IORedisPool extends EventEmitter {
      * @param priority
      * @returns
      */
-    getConnection(priority?: number): Promise<Redis>;
-    del(keys: string[]): Promise<number>;
+    getConnection(priority?: number): Promise<any>;
+    del(keys: string[]): Promise<any>;
     set(key: string, value: string | number | Buffer, keepttl?: boolean): Promise<any>;
-    setWithSeconds(key: string, value: string | number | Buffer, secondsToken: "EX", seconds: number | string): Promise<"OK">;
-    setex(key: string, ttl: number, value: number | string | Buffer): Promise<"OK">;
-    get(key: string): Promise<string | null>;
-    mget(keys: string[]): Promise<(string | null)[]>;
-    exists(keys: string[]): Promise<number>;
+    setWithSeconds(key: string, value: string | number | Buffer, secondsToken: "EX", seconds: number | string): Promise<any>;
+    setex(key: string, ttl: number, value: number | string | Buffer): Promise<any>;
+    get(key: string): Promise<any>;
+    mget(keys: string[]): Promise<any>;
+    exists(keys: string[]): Promise<any>;
     /**
      * commands can be [["set", "testMulti", "5"], ["get", "testMulti"], ["incr", "testMulti"], ["decr", "testMulti"]]
      * TODO: instead of using plain array of string, expose a function just like redis.multi
@@ -59,7 +58,7 @@ export declare class IORedisPool extends EventEmitter {
      * @param commands string[][]
      * @returns
      */
-    execCommands(commands: (number | string)[][]): Promise<[error: Error | null, result: unknown][] | null>;
+    execCommands(commands: (number | string)[][]): Promise<any>;
     release(client: IRedis): Promise<void>;
     disconnect(client: IRedis): Promise<void>;
     end(): Promise<void>;
