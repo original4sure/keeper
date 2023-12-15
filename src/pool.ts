@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events'
 import { createPool, Factory, Pool, Options } from 'generic-pool'
-import Redis, { Redis as IRedis, RedisOptions, Pipeline, RedisCommander } from 'ioredis'
+import { Redis as IRedis, RedisOptions, Pipeline, RedisCommander } from 'ioredis'
+import * as Redis from "ioredis"
+
 
 export class IORedisConnectionOptions {
   meh: Options = {}
