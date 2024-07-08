@@ -31,7 +31,7 @@ const createPool = (url: string) => {
 }
 
 
-const availablePools: Record<string, IORedisPool> = {};
+export const availablePools: Record<string, IORedisPool> = {};
 export const getCachePool = async (uri: string): Promise<IORedisPool> => {
   if (availablePools[uri]) {
     // AppLoggers.info("cache --> found available connection for uri");
@@ -81,4 +81,3 @@ const onCacheMiss = async (
   }
   return result
 }
-

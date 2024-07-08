@@ -1,4 +1,5 @@
 import { IORedisPool } from "./pool";
+export declare const availablePools: Record<string, IORedisPool>;
 export declare const getCachePool: (uri: string) => Promise<IORedisPool>;
 export declare const Keeper: <T>(options: {
     parseJSON: boolean;
