@@ -1,12 +1,9 @@
 {
-  "name": "@o4s/keeper",
-  "version": "2.0.0",
+  "name": "@original4sure/keeper",
+  "version": "2.0.6",
   "description": "Keeper is a function wrapper, which caches the response on redis",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "publishConfig": {
-    "registry": "http://registry.o4s.in:8081/repository/o4s-dev-internal/"
-  },
   "scripts": {
     "ts-node": "ts-node",
     "prestart": "npm run build",
@@ -44,5 +41,8 @@
     "ts-node": "^8.8.2",
     "tslint": "^6.1.1",
     "typescript": "^4.7.4"
+  },
+  "publishConfig": {
+    "@original4sure:registry": "https://npm.pkg.github.com"
   }
 }
