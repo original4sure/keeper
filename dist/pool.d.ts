@@ -2,7 +2,7 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
 import { Options } from 'generic-pool';
-import Redis, { Redis as IRedis, RedisOptions } from 'ioredis';
+import Redis, { Redis as IRedis, RedisOptions, RedisValue } from 'ioredis';
 export declare class IORedisConnectionOptions {
     meh: Options;
 }
@@ -49,6 +49,9 @@ export declare class IORedisPool extends EventEmitter {
     setWithSeconds(key: string, value: string | number | Buffer, secondsToken: "EX", seconds: number | string): Promise<"OK">;
     setex(key: string, ttl: number, value: number | string | Buffer): Promise<"OK">;
     get(key: string): Promise<string | null>;
+    evalsha(sha1: string | Buffer, numkeys: number | string, ...args: RedisValue[]): Promise<unknown>;
+    eval(script: string | Buffer, numkeys: number | string, ...args: RedisValue[]): Promise<unknown>;
+    quit(): Promise<boolean>;
     mget(keys: string[]): Promise<(string | null)[]>;
     exists(keys: string[]): Promise<number>;
     /**

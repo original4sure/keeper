@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import { createPool, Factory, Pool, Options } from 'generic-pool'
-import Redis, { Redis as IRedis, RedisOptions, Pipeline, RedisCommander } from 'ioredis'
+import Redis, { Redis as IRedis, RedisOptions, RedisValue } from 'ioredis'
 
 export class IORedisConnectionOptions {
   meh: Options = {}
@@ -188,6 +188,26 @@ export class IORedisPool extends EventEmitter {
     const res = await cache.get(key)
     this.pool.release(cache)
     return res
+  }
+
+  async evalsha(sha1: string | Buffer, numkeys: number | string, ...args: RedisValue[]) {
+    const cache = await this.getConnection()
+    const res = await cache.evalsha(sha1, numkeys, ...args)
+    this.pool.release(cache)
+    return res
+  }
+
+  async eval(script: string | Buffer, numkeys: number | string, ...args: RedisValue[]) {
+    const cache = await this.getConnection()
+    const res = await cache.eval(script, numkeys, ...args)
+    this.pool.release(cache)
+    return res
+  }
+
+  async quit() {
+    // empty implementation for quit as we dont want to close connection exactly.
+    // only release the connection.
+    return true
   }
 
   async mget(keys: string[]) {
