@@ -16,7 +16,7 @@ const createRedisStub = sinon.stub(Pool, 'createRedis').callsFake(
     return new RedisMock.default()
   })
 
-const cacheUri = "redis://localhost:6379/12"
+const cacheUri = process.env.cacheURI || "redis://localhost:6379/12"
 
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
