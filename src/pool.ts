@@ -191,7 +191,6 @@ export class IORedisPool extends EventEmitter {
   }
 
   async evalsha(sha1: string | Buffer, numkeys: number | string, ...args: RedisValue[]) {
-    console.log('------', sha1, numkeys)
     const cache = await this.getConnection()
     const res = await cache.evalsha(sha1, numkeys, ...args)
     this.pool.release(cache)
@@ -199,7 +198,6 @@ export class IORedisPool extends EventEmitter {
   }
 
   async eval(script: string | Buffer, numkeys: number | string, ...args: RedisValue[]) {
-    console.log('====', script, numkeys)
     const cache = await this.getConnection()
     const res = await cache.eval(script, numkeys, ...args)
     this.pool.release(cache)
